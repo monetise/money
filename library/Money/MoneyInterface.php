@@ -11,10 +11,10 @@ namespace Monetise\Money\Money;
 use Monetise\Money\Exception\InvalidArgumentException;
 
 /**
+ * Interface MoneyInterface
+ *
  * @see http://martinfowler.com/eaaCatalog/money.html
  * @see https://github.com/sebastianbergmann/money
- *
- * Interface MoneyInterface
  */
 interface MoneyInterface
 {
@@ -34,26 +34,30 @@ interface MoneyInterface
     public function setAmount($amount);
 
     /**
+     * Retrieve the number of fraction digits
+     *
+     * This information has to be used only for float conversions.
+     *
      * @return int
      */
     public function getFractionDigits();
 
     /**
+     * Retrieve the number of sub-units
+     *
      * @return int
      */
     public function getSubUnit();
 
     /**
-     * Get the currency of the monetary value represented by this
-     * object
+     * Get the currency of the monetary value represented by this object
      *
      * @return string
      */
     public function getCurrency();
 
     /**
-     * Set the currency of the monetary value represented by this
-     * object
+     * Set the currency of the monetary value represented by this object
      *
      * @param string $currency
      * @return $this
@@ -61,15 +65,17 @@ interface MoneyInterface
     public function setCurrency($currency);
 
     /**
+     * Check if this object is equal to another
+     *
      * @param MoneyInterface $money
      * @return bool
      */
     public function isEqualTo(MoneyInterface $money);
 
     /**
-     * Compares this object with another
+     * Compare this object with another
      *
-     * Returns an integer less than, equal to, or greater than zero
+     * It returns an integer less than, equal to, or greater than zero
      * if the value of this MoneyInterface object is considered to be respectively
      * less than, equal to, or greater than the other MoneyInterface object.
      *

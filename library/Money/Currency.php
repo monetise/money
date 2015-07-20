@@ -19,6 +19,7 @@ use Monetise\Money\Exception\InvalidArgumentException;
 abstract class Currency
 {
     /**
+     * Currency metadata
      *
      * @see https://github.com/sebastianbergmann/money/blob/master/src/Currency.php
      *
@@ -1121,7 +1122,7 @@ abstract class Currency
 
     /**
      * @param string $currencyCode
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      * @return array
      */
     protected static function getCurrencyData($currencyCode)

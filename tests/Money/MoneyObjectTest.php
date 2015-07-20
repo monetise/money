@@ -14,7 +14,6 @@ use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
 use Monetise\Money\Exception\OverflowException;
 
-
 /**
  * Class MoneyObjectTest
  */
@@ -44,7 +43,6 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(InvalidArgumentException::class);
         $money->setAmount('11');
-
     }
 
     public function testSetGetCurrency()
@@ -63,7 +61,6 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(InvalidArgumentException::class);
         $money->setAmount('foo');
-
     }
 
     public function testIsEqualTo()
@@ -82,7 +79,6 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $d = (new MoneyObject())->setAmount(50)->setCurrency('USD');
         $this->setExpectedException(InvalidArgumentException::class);
         $d->isEqualTo($a);
-
     }
 
     public function testCompareTo()
@@ -214,8 +210,4 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(OverflowException::class);
         $a = (new MoneyObject)->fromFloat((float) PHP_INT_MAX + 1, 'USD');
     }
-
-
-
-
 }

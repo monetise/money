@@ -8,9 +8,9 @@
  */
 namespace Monetise\Money\Money;
 
+use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\Exception\OverflowException;
-use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 
 /**
  * Trait MoneyTrait
@@ -48,7 +48,7 @@ trait MoneyTrait
     {
         if ($amount === null) {
             $amount = 0; // TODO: initialization workaround
-        } else if (!is_int($amount)) {
+        } elseif (!is_int($amount)) {
             throw new InvalidArgumentException(sprintf(
                 'Amount must be an integer, "%s" given',
                 is_object($amount) ? get_class($amount) : gettype($amount)
@@ -241,17 +241,15 @@ trait MoneyTrait
         $fractionDigits = $this->getFractionDigits();
         $subUnit = $this->getSubUnit();
 
-        $this->setAmount($this->castToInt(
-            round(
-                $subUnit * round(
-                    $amount,
-                    sqrt($subUnit),
+        $this->setAmount(
+            $this->castToInt(
+                round(
+                    $subUnit * round($amount, $fractionDigits, PHP_ROUND_HALF_UP),
+                    0,
                     PHP_ROUND_HALF_UP
-                ),
-                0,
-                PHP_ROUND_HALF_UP
+                )
             )
-        ));
+        );
 
         return $this;
     }
