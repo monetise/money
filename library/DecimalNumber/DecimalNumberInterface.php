@@ -1,6 +1,6 @@
 <?php
 /**
- * Montise
+ * Monetise
  *
  * @link        https://github.com/monetise/money
  * @copyright   Copyright (c) 2015, Ripa Club
