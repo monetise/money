@@ -11,6 +11,8 @@ namespace Monetise\Money\Money;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 use Zend\Stdlib\Hydrator\HydratorAwareTrait;
+use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
+use Zend\Stdlib\Hydrator\Filter\FilterComposite;
 
 /**
  * MoneyObject
@@ -29,6 +31,14 @@ class MoneyObject implements MoneyInterface, HydratorAwareInterface
     {
         if (!$this->hydrator) {
             $this->hydrator = new ClassMethods(true);
+            $this->hydrator->addFilter(
+                'hydrator',
+                new MethodMatchFilter(
+                    'getHydrator',
+                    true // exclude
+                ),
+                FilterComposite::CONDITION_AND
+            );
         }
         return $this->hydrator;
     }
