@@ -13,6 +13,10 @@ use Monetise\Money\Money\MoneyInterface;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
 use Monetise\Money\Exception\OverflowException;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Monetise\Money\Money\Monetise\Money\Money;
+use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\ObjectProperty;
 
 /**
  * Class MoneyObjectTest
@@ -23,6 +27,21 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
     public function testImplementsInterface()
     {
         $this->assertInstanceOf(MoneyInterface::class, new MoneyObject());
+    }
+
+    public function testGetHydrator()
+    {
+        $money = new MoneyObject();
+        $this->assertInstanceOf(HydratorAwareInterface::class, $money);
+
+        // Test default
+        $defaultHydrator = $money->getHydrator();
+        $this->assertInstanceOf(ClassMethods::class, $defaultHydrator);
+        $this->assertTrue($defaultHydrator->getUnderscoreSeparatedKeys(), 'Asserting underscore separated keys');
+
+        $anotherHydrator = new ObjectProperty();
+        $money->setHydrator($anotherHydrator);
+        $this->assertSame($anotherHydrator, $money->getHydrator());
     }
 
 

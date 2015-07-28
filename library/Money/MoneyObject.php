@@ -8,10 +8,28 @@
  */
 namespace Monetise\Money\Money;
 
+use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Stdlib\Hydrator\HydratorAwareTrait;
+
 /**
  * MoneyObject
  */
-class MoneyObject implements MoneyInterface
+class MoneyObject implements MoneyInterface, HydratorAwareInterface
 {
     use MoneyTrait;
+    use HydratorAwareTrait;
+
+    /**
+     * Retrieve hydrator
+     *
+     * @return HydratorInterface
+     */
+    public function getHydrator()
+    {
+        if (!$this->hydrator) {
+            $this->hydrator = new ClassMethods(true);
+        }
+        return $this->hydrator;
+    }
 }
