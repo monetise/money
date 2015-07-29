@@ -39,6 +39,22 @@ class MoneyObject implements MoneyInterface, HydratorAwareInterface
                 ),
                 FilterComposite::CONDITION_AND
             );
+            $this->hydrator->addFilter(
+                'sub_unit',
+                new MethodMatchFilter(
+                    'getSubUnit',
+                    true // exclude
+                ),
+                FilterComposite::CONDITION_AND
+            );
+            $this->hydrator->addFilter(
+                'fraction_digits',
+                new MethodMatchFilter(
+                    'getFractionDigits',
+                    true // exclude
+                ),
+                FilterComposite::CONDITION_AND
+            );
         }
         return $this->hydrator;
     }
