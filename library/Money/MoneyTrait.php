@@ -27,7 +27,6 @@ trait MoneyTrait
      */
     protected $currency;
 
-
     /**
      * Get the monetary value represented by this object
      *
@@ -110,7 +109,7 @@ trait MoneyTrait
      * @throws InvalidArgumentException
      * @return bool
      */
-    public function isEqualTo(MoneyInterface $money)
+    public function equalTo(MoneyInterface $money)
     {
         return $this->compareTo($money) === 0;
     }
@@ -206,13 +205,15 @@ trait MoneyTrait
             $factor = $factor->toFloat();
         }
 
-        $this->setAmount($this->castToInt(
+        $this->setAmount($this->toInt(
             round($factor * $this->getAmount(), 0, $roundingMode)
         ));
         return $this;
     }
 
     /**
+     * Convert the current amount to float
+     *
      * @return float
      */
     public function toFloat()
@@ -221,6 +222,8 @@ trait MoneyTrait
     }
 
     /**
+     * Populate current amount from a given float value
+     *
      * @param float $amount
      * @param string $currency
      * @return $this
@@ -242,7 +245,7 @@ trait MoneyTrait
         $subUnit = $this->getSubUnit();
 
         $this->setAmount(
-            $this->castToInt(
+            $this->toInt(
                 round(
                     $subUnit * round($amount, $fractionDigits, PHP_ROUND_HALF_UP),
                     0,
@@ -265,18 +268,18 @@ trait MoneyTrait
     protected function assertInsideIntegerBounds($amount)
     {
         if (abs($amount) > PHP_INT_MAX) {
-            throw new OverflowException();
+            throw new OverflowException;
         }
     }
 
     /**
      * Cast an amount to an integer but ensure that the operation won't hide overflow
      *
-     * @param number $amount
+     * @param number $amount // FIXME: i think number type do not exist
      * @return int
      * @throws OverflowException
      */
-    protected function castToInt($amount)
+    protected function toInt($amount)
     {
         $this->assertInsideIntegerBounds($amount);
         return intval($amount);

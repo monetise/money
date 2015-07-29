@@ -13,6 +13,8 @@ use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 
 /**
  * Class DecimalNumberObjectTest
+ *
+ * @group decimalnumber
  */
 class DecimalNumberObjectTest extends \PHPUnit_Framework_TestCase
 {

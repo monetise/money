@@ -70,7 +70,7 @@ interface MoneyInterface
      * @param MoneyInterface $money
      * @return bool
      */
-    public function isEqualTo(MoneyInterface $money);
+    public function equalTo(MoneyInterface $money);
 
     /**
      * Compare this object with another

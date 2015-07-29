@@ -9,10 +9,10 @@
 namespace Monetise\Money\Money;
 
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\Filter\FilterComposite;
+use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 use Zend\Stdlib\Hydrator\HydratorAwareTrait;
-use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
-use Zend\Stdlib\Hydrator\Filter\FilterComposite;
 
 /**
  * MoneyObject
@@ -25,7 +25,7 @@ class MoneyObject implements MoneyInterface, HydratorAwareInterface
     /**
      * Retrieve hydrator
      *
-     * @return HydratorInterface
+     * @return ClassMethods
      */
     public function getHydrator()
     {
