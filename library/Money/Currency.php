@@ -22,7 +22,7 @@ abstract class Currency
     /**
      * Currency metadata
      *
-     * @see https://github.com/sebastianbergmann/money/blob/master/src/Currency.php
+     * @link https://github.com/sebastianbergmann/money/blob/master/src/Currency.php
      *
      * @var array
      */
@@ -1123,8 +1123,8 @@ abstract class Currency
 
     /**
      * @param string $currencyCode
-     * @throws InvalidArgumentException
      * @return array
+     * @throws InvalidArgumentException
      */
     protected static function getCurrencyData($currencyCode)
     {
@@ -1143,19 +1143,21 @@ abstract class Currency
     /**
      * Returns the ISO 4217 currency name
      *
-     * @param string $currencyCode The ISO 4217 currency name
+     * @param string $currencyCode The currency ISO 4217 alpha 3 code
      * @return string
+     * @throws InvalidArgumentException
      */
     public static function getCurrencyName($currencyCode)
     {
-        return static::getCurrencyData($currencyCode)['currency_name'];
+        return static::getCurrencyData($currencyCode)['display_name'];
     }
 
     /**
      * Returns the ISO 4217 numeric code
      *
-     * @param string $currencyCode The ISO 4217 alphabetic code
+     * @param string $currencyCode The currency ISO 4217 alpha 3 code
      * @return int
+     * @throws InvalidArgumentException
      */
     public static function getNumericCode($currencyCode)
     {
@@ -1163,30 +1165,53 @@ abstract class Currency
     }
 
     /**
-     * Returns the default number of fraction digits used
+     * Returns the default number of fraction digits
      *
-     * @param string $currencyCode The ISO 4217 alphabetic code
+     * @param string $currencyCode The currency ISO 4217 alpha 3 code
      * @return integer
+     * @throws InvalidArgumentException
      */
     public static function getDefaultFractionDigits($currencyCode)
     {
-        // FIXME: should always be an integer
-        return static::getCurrencyData($currencyCode)['default_fraction_digits'];
+        $defaultFractionDigits = static::getCurrencyData($currencyCode)['default_fraction_digits'];
+        if (!is_int($defaultFractionDigits)) {
+            throw new UnexpectedValueException(sprintf(
+                'The currency default fraction digits value must be an integer; "%s" given',
+                is_object($defaultFractionDigits) ? get_class($defaultFractionDigits) : gettype($defaultFractionDigits)
+            ));
+        }
+        if ($defaultFractionDigits < 0) {
+            throw new UnexpectedValueException(sprintf(
+                'The currency default fraction digits value must be greater than 0; "%s" given',
+                $defaultFractionDigits
+            ));
+        }
+        return $defaultFractionDigits;
     }
 
     /**
-     * Returns the sub unit used
+     * Returns the sub-unit value
      *
-     * @param string $currencyCode The ISO 4217 alphabetic code
+     * @param string $currencyCode The currency ISO 4217 alpha 3 code
      * @return integer
-     * @throw UnexpectedValueException
+     * @throws UnexpectedValueException
+     * @throws InvalidArgumentException
      */
     public static function getSubUnit($currencyCode)
     {
-        // FIXME: should always be an integer
-        if (static::getCurrencyData($currencyCode)['sub_unit'] < 1) {
-            throw new UnexpectedValueException('Currency sub units value MUST be > 1');
+        $subunits = static::getCurrencyData($currencyCode)['sub_unit'];
+        if (!is_int($subunits)) {
+            throw new UnexpectedValueException(sprintf(
+                'The currency sub-units value must be an integer; "%s" given',
+                is_object($subunits) ? get_class($subunits) : gettype($subunits)
+            ));
         }
-        return static::getCurrencyData($currencyCode)['sub_unit'];
+        if ($subunits < 1) {
+            throw new UnexpectedValueException(sprintf(
+                'The currency sub-units value must be greater than 1; "%s" given',
+                $subunits
+            ));
+        }
+        return $subunits;
     }
 }
