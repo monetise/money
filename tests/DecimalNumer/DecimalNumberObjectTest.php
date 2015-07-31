@@ -8,8 +8,8 @@
  */
 namespace Monetise\MoneyTest\DecimalNumber;
 
-use Monetise\Money\DecimalNumber\DecimalNumberObject;
 use Monetise\Money\DecimalNumber\DecimalNumberInterface;
+use Monetise\Money\DecimalNumber\DecimalNumberObject;
 
 /**
  * Class DecimalNumberObjectTest
