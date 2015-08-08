@@ -13,8 +13,9 @@ use Monetise\Money\Exception\InvalidArgumentException;
 /**
  * Interface MoneyInterface
  *
- * @see http://martinfowler.com/eaaCatalog/money.html
- * @see https://github.com/sebastianbergmann/money
+ * @link http://martinfowler.com/eaaDev/quantity.html
+ * @link http://martinfowler.com/eaaCatalog/money.html
+ * @link https://github.com/sebastianbergmann/money
  */
 interface MoneyInterface
 {
