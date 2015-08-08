@@ -46,7 +46,7 @@ trait MoneyTrait
     public function setAmount($amount)
     {
         if ($amount === null) {
-            $amount = 0; // TODO: initialization workaround
+            $amount = 0;
         } elseif (!is_int($amount)) {
             throw new InvalidArgumentException(sprintf(
                 'Amount must be an integer, "%s" given',

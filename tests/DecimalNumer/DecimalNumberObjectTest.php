@@ -10,6 +10,7 @@ namespace Monetise\MoneyTest\DecimalNumber;
 
 use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
+use Monetise\Money\Exception\InvalidArgumentException;
 
 /**
  * Class DecimalNumberObjectTest
@@ -19,6 +20,21 @@ use Monetise\Money\DecimalNumber\DecimalNumberObject;
 class DecimalNumberObjectTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testCtor()
+    {
+        $decimalNumber = new DecimalNumberObject();
+        $this->assertSame(0, $decimalNumber->getNumeral());
+        $this->assertSame(0, $decimalNumber->getFractionDigits());
+    
+        $decimalNumber = new DecimalNumberObject(111);
+        $this->assertSame(111, $decimalNumber->getNumeral());
+        $this->assertSame(0, $decimalNumber->getFractionDigits());
+    
+        $decimalNumber = new DecimalNumberObject(1000, 2);
+        $this->assertSame(1000, $decimalNumber->getNumeral());
+        $this->assertSame(2, $decimalNumber->getFractionDigits());
+    }
+    
     public function testImplementsInterface()
     {
         $this->assertInstanceOf(DecimalNumberInterface::class, new DecimalNumberObject());
@@ -34,9 +50,13 @@ class DecimalNumberObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($decimalNumber, $decimalNumber->setNumeral(33));
         $this->assertSame(33, $decimalNumber->getNumeral());
         $this->assertInternalType('int', $decimalNumber->getNumeral());
+        
+        $this->assertSame($decimalNumber, $decimalNumber->setNumeral(null));
+        $this->assertSame(0, $decimalNumber->getNumeral());
+        $this->assertInternalType('int', $decimalNumber->getNumeral());
 
+        $this->setExpectedException(InvalidArgumentException::class);
         $decimalNumber->setNumeral("11");
-        $this->assertSame(11, $decimalNumber->getNumeral());
     }
 
     public function testSetGetFractionDigits()
@@ -49,9 +69,13 @@ class DecimalNumberObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($decimalNumber, $decimalNumber->setFractionDigits(33));
         $this->assertSame(33, $decimalNumber->getFractionDigits());
         $this->assertInternalType('int', $decimalNumber->getFractionDigits());
+        
+        $this->assertSame($decimalNumber, $decimalNumber->setFractionDigits(null));
+        $this->assertSame(0, $decimalNumber->getFractionDigits());
+        $this->assertInternalType('int', $decimalNumber->getFractionDigits());
 
+        $this->setExpectedException(InvalidArgumentException::class);
         $decimalNumber->setFractionDigits("11");
-        $this->assertSame(11, $decimalNumber->getFractionDigits());
     }
 
     public function testToFloat()

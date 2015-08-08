@@ -34,7 +34,6 @@ class MoneyCollectionTest extends \PHPUnit_Framework_TestCase
     public function testImplementsInterface()
     {
         $this->assertInstanceOf(MoneyCollectionInterface::class, $this->collection);
-        $this->assertInstanceOf(HydratorAwareInterface::class, $this->collection);
     }
     
     public function testCtor()
@@ -50,6 +49,7 @@ class MoneyCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testGetHydrator()
     {
+        $this->assertInstanceOf(HydratorAwareInterface::class, $this->collection);
         $this->assertInstanceOf(ArraySerializable::class, $this->collection->getHydrator());
     }
     

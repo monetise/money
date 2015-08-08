@@ -8,6 +8,7 @@
  */
 namespace Monetise\Money\DecimalNumber;
 
+use Monetise\Money\Exception\InvalidArgumentException;
 /**
  * Class DecimalNumberTrait
  */
@@ -37,7 +38,16 @@ trait DecimalNumberTrait
      */
     public function setFractionDigits($fractionDigits)
     {
-        $this->fractionDigits = (int) $fractionDigits;
+        if ($fractionDigits === null) {
+            $fractionDigits = 0;
+        } elseif (!is_int($fractionDigits) || $fractionDigits < 0) {
+            throw new InvalidArgumentException(sprintf(
+                'Fraction digits must be an integer greater than or equal to zero, "%s" given',
+                is_object($fractionDigits) ? get_class($fractionDigits) : gettype($fractionDigits)
+                ));
+        }
+
+        $this->fractionDigits = $fractionDigits;
         return $this;
     }
 
@@ -55,7 +65,16 @@ trait DecimalNumberTrait
      */
     public function setNumeral($numeral)
     {
-        $this->numeral = (int) $numeral;
+        if ($numeral === null) {
+            $numeral = 0;
+        } elseif (!is_int($numeral)) {
+            throw new InvalidArgumentException(sprintf(
+                'Numera digits must be an integer, "%s" given',
+                is_object($numeral) ? get_class($numeral) : gettype($numeral)
+                ));
+        }
+        
+        $this->numeral = $numeral;
         return $this;
     }
 

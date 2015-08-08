@@ -29,6 +29,21 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(MoneyInterface::class, new MoneyObject);
     }
+    
+    public function testCtor()
+    {
+        $money = new MoneyObject();
+        $this->assertSame(0, $money->getAmount());
+        $this->assertNull($money->getCurrency());
+        
+        $money = new MoneyObject(111);
+        $this->assertSame(111, $money->getAmount());
+        $this->assertNull($money->getCurrency());
+        
+        $money = new MoneyObject(1000, 'USD');
+        $this->assertSame(1000, $money->getAmount());
+        $this->assertSame('USD', $money->getCurrency());
+    }
 
     public function testGetHydrator()
     {
