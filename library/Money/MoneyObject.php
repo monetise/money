@@ -21,6 +21,21 @@ class MoneyObject implements MoneyInterface, HydratorAwareInterface
 {
     use MoneyTrait;
     use HydratorAwareTrait;
+    
+    /**
+     * @param int|null $amount
+     * @param string|null $currency
+     */
+    public function __construct($amount = null, $currency = null)
+    {
+        if (null !== $amount) {
+            $this->setAmount($amount);
+        }
+        
+        if (null !== $currency) {
+            $this->setCurrency($currency);
+        }
+    }
 
     /**
      * Retrieve hydrator

@@ -24,6 +24,11 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
     use HydratorAwareTrait;
     
     /**
+     * @var MoneyInterface[]
+     */
+    protected $storage;
+    
+    /**
      * Constructor
      *
      * @param array  $input
@@ -83,7 +88,6 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
     }
     
-    
     /**
      * {@inheritdoc}
      * @throws Exception\InvalidArgumentException
@@ -119,5 +123,99 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         return $oldData;
     }
     
+    /**
+     * {@inheritdoc}
+     */
+    public function abs()
+    {
+        foreach ($this->storage as $money) {
+            $money->abs();
+        }
+        return $this;    
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function negate()
+    {
+        foreach ($this->storage as $money) {
+            $money->negate();
+        }
+        return $this;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function add(MoneyCollectionInterface $collection)
+    {    
+        return $this->merge($collection)->reduce();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function subtract(MoneyCollectionInterface $collection)
+    {
+        foreach ($collection as $money) {
+            $money = clone $money;
+            $this->append($money->negate());
+        }
+        return $this->reduce();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function multiply($factor, $roundingMode = PHP_ROUND_HALF_UP)
+    {
+        foreach ($this->storage as $money) {
+            $money->multiply($factor, $roundingMode);
+        }
+        return $this;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function reduce()
+    {
+        $moneyByCurrency = [];
+        
+        foreach ($this->storage as $money) {
+            $currency = $money->getCurrency();
+            if (!isset($moneyByCurrency[$currency])) {
+                $moneyByCurrency[$currency] = (new MoneyObject)->setCurrency($currency);
+            }
+            $moneyByCurrency[$currency]->add($money);
+        }
+        
+        $this->storage = $moneyByCurrency;
+        return $this;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function merge(MoneyCollectionInterface $collection)
+    {
+        foreach ($collection as $money) {
+            $this->append(clone $money);
+        }
+        return $this;
+    }
+    
+    /**
+     * Clone recursively all objects within the collection
+     */
+    public function __clone()
+    {
+        $cloned = [];
+        foreach ($this->storage as $k => $v) {
+            $cloned[$k] = clone $v;
+        }
+        $this->storage = $cloned;
+    }
    
 }

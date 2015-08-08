@@ -118,7 +118,7 @@ interface MoneyInterface
     /**
      * Multiply the monetary value of this object by a given factor
      *
-     * @param  float   $factor
+     * @param  DecimalNumberInterface|float $factor
      * @param  int $roundingMode
      * @return $this
      */

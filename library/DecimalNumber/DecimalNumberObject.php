@@ -14,4 +14,15 @@ namespace Monetise\Money\DecimalNumber;
 class DecimalNumberObject implements DecimalNumberInterface
 {
     use DecimalNumberTrait;
+    
+    public function __construct($numeral = null, $fractionDigits = null)
+    {
+        if (null !== $numeral) {
+            $this->setNumeral($numeral);
+        }
+        
+        if (null !== $fractionDigits) {
+            $this->setFractionDigits($fractionDigits);
+        }
+    }
 }
