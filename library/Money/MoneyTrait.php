@@ -40,19 +40,24 @@ trait MoneyTrait
     /**
      * Set the monetary value represented by this object
      *
-     * @param int $amount
+     * @param int|null $amount
      * @return $this
      */
     public function setAmount($amount)
     {
         if ($amount === null) {
-            $amount = 0;
-        } elseif (!is_int($amount)) {
+            $this->amount = 0;
+            return $this;
+        } 
+        
+        if (!is_int($amount)) {
             throw new InvalidArgumentException(sprintf(
                 'Amount must be an integer, "%s" given',
                 is_object($amount) ? get_class($amount) : gettype($amount)
             ));
         }
+        
+        // Overflow check is not necessary because we have an integer
         $this->amount = $amount;
         return $this;
     }
@@ -88,7 +93,7 @@ trait MoneyTrait
      * Set the currency of the monetary value represented by this
      * object
      *
-     * @param string $currency
+     * @param string|null $currency
      * @return $this
      */
     public function setCurrency($currency)
@@ -127,15 +132,15 @@ trait MoneyTrait
      */
     public function compareTo(MoneyInterface $money)
     {
-        if ($this->getCurrency() !== $money->getCurrency()) {
+        if ($this->currency !== $money->getCurrency()) {
             throw new InvalidArgumentException('Operations between different currencies are not supported yet.');
         }
 
-        if ($this->getAmount() == $money->getAmount()) {
+        if ($this->amount == $money->getAmount()) {
             return 0;
         }
 
-        return $this->getAmount() < $money->getAmount() ? -1 : 1;
+        return $this->amount < $money->getAmount() ? -1 : 1;
     }
 
     /**
@@ -145,7 +150,7 @@ trait MoneyTrait
      */
     public function abs()
     {
-        if ($this->getAmount() < 0) {
+        if ($this->amount < 0) {
             $this->negate();
         }
         return $this;
@@ -158,7 +163,7 @@ trait MoneyTrait
      */
     public function negate()
     {
-        $this->setAmount(-$this->getAmount());
+        $this->amount *= -1;
         return $this;
     }
 
@@ -170,11 +175,11 @@ trait MoneyTrait
      */
     public function add(MoneyInterface $money)
     {
-        if ($this->getCurrency() !== $money->getCurrency()) {
-            throw new InvalidArgumentException('Operations between different currencies are not supported yet.');
+        if ($this->currency !== $money->getCurrency()) {
+            throw new InvalidArgumentException('Operations between different currencies are not supported');
         }
 
-        $this->setAmount($this->getAmount() + $money->getAmount());
+        $this->amount = $this->toInt($this->amount + $money->getAmount());
         return $this;
     }
 
@@ -186,9 +191,11 @@ trait MoneyTrait
      */
     public function subtract(MoneyInterface $money)
     {
-        $negatedMoney = clone $money;
-        $negatedMoney->negate();
-        $this->add($negatedMoney);
+        if ($this->currency !== $money->getCurrency()) {
+            throw new InvalidArgumentException('Operations between different currencies are not supported');
+        }
+        
+        $this->amount = $this->toInt($this->amount - $money->getAmount());
         return $this;
     }
 
@@ -205,9 +212,9 @@ trait MoneyTrait
             $factor = $factor->toFloat();
         }
 
-        $this->setAmount($this->toInt(
-            round($factor * $this->getAmount(), 0, $roundingMode)
-        ));
+        $this->amount = $this->toInt(
+            round($factor * $this->amount, 0, $roundingMode)
+        );
         return $this;
     }
 
@@ -218,7 +225,7 @@ trait MoneyTrait
      */
     public function toFloat()
     {
-        return round($this->getAmount() / $this->getSubUnit(), $this->getFractionDigits());
+        return round($this->amount / $this->getSubUnit(), $this->getFractionDigits());
     }
 
     /**
@@ -240,20 +247,14 @@ trait MoneyTrait
                 gettype($amount)
             ));
         }
-
-        $fractionDigits = $this->getFractionDigits();
-        $subUnit = $this->getSubUnit();
-
-        $this->setAmount(
-            $this->toInt(
-                round(
-                    $subUnit * round($amount, $fractionDigits, PHP_ROUND_HALF_UP),
-                    0,
-                    PHP_ROUND_HALF_UP
-                )
+        
+        $this->amount = $this->toInt(
+            round(
+                $this->getSubUnit() * round($amount, $this->getFractionDigits(), PHP_ROUND_HALF_UP),
+                0,
+                PHP_ROUND_HALF_UP
             )
         );
-
         return $this;
     }
     
@@ -266,20 +267,6 @@ trait MoneyTrait
     }
 
     /**
-     * Raises an exception if the amount is outside of the integer bounds
-     *
-     * @param  number $amount
-     * @return number
-     * @throws OverflowException
-     */
-    protected function assertInsideIntegerBounds($amount)
-    {
-        if (abs($amount) > PHP_INT_MAX) {
-            throw new OverflowException;
-        }
-    }
-
-    /**
      * Cast an amount to an integer but ensure that the operation won't hide overflow
      *
      * @param number $amount // FIXME: i think number type do not exist
@@ -288,7 +275,9 @@ trait MoneyTrait
      */
     protected function toInt($amount)
     {
-        $this->assertInsideIntegerBounds($amount);
+        if (abs($amount) > PHP_INT_MAX) {
+            throw new OverflowException;
+        }
         return intval($amount);
     }
 }

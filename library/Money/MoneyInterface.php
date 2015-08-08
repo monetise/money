@@ -28,7 +28,7 @@ interface MoneyInterface
     /**
      * Set the monetary value represented by this object
      *
-     * @param int $amount
+     * @param int|null $amount
      * @return $this
      */
     public function setAmount($amount);
@@ -52,14 +52,14 @@ interface MoneyInterface
     /**
      * Get the currency of the monetary value represented by this object
      *
-     * @return string
+     * @return string|null
      */
     public function getCurrency();
 
     /**
      * Set the currency of the monetary value represented by this object
      *
-     * @param string $currency
+     * @param string|null $currency
      * @return $this
      */
     public function setCurrency($currency);

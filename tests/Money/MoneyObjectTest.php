@@ -200,7 +200,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
 
         $c = (new MoneyObject)->setAmount(50)->setCurrency('USD');
         $this->setExpectedException(InvalidArgumentException::class);
-        $a->add($c);
+        $a->subtract($c);
     }
 
     public function testMultiplyFloat()
@@ -245,7 +245,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(OverflowException::class);
         $a = (new MoneyObject)->fromFloat((float) PHP_INT_MAX + 1, 'USD');
-    }
+    }   
     
     public function testCopy()
     {
