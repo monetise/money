@@ -139,4 +139,11 @@ interface MoneyInterface
      * @return $this
      */
     public function fromFloat($amount, $currency = null);
+    
+    /**
+     * Get a copy of this money object
+     * 
+     * @return MoneyInterface
+     */
+    public function copy();
 }

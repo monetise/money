@@ -207,6 +207,14 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
     }
     
     /**
+     * @return MoneyCollectionInterface
+     */
+    public function copy()
+    {
+        return clone $this;
+    }
+    
+    /**
      * Clone recursively all objects within the collection
      */
     public function __clone()

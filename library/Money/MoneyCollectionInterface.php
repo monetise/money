@@ -15,7 +15,15 @@ use Monetise\Money\DecimalNumber\DecimalNumberInterface;
  * Interface MoneyCollectionInterface
  */
 interface MoneyCollectionInterface extends Traversable
-{
+{    
+    /**
+     * Get a copy of this collection as array
+     * 
+     * @return MoneyInterface[]
+     */
+    public function getArrayCopy();
+    
+    
     /**
      * Set the absolute monetary value for all money objects within the collection
      *
@@ -71,5 +79,12 @@ interface MoneyCollectionInterface extends Traversable
      * @return $this
      */
     public function merge(MoneyCollectionInterface $collection);
+    
+    /**
+     * Get a copy of this money collection
+     *
+     * @return MoneyInterface
+     */
+    public function copy();
     
 }

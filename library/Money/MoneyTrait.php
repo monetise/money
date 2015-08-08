@@ -256,7 +256,14 @@ trait MoneyTrait
 
         return $this;
     }
-
+    
+    /**
+     * @return MoneyInterface
+     */
+    public function copy()
+    {
+        return clone $this;
+    }
 
     /**
      * Raises an exception if the amount is outside of the integer bounds

@@ -246,4 +246,13 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(OverflowException::class);
         $a = (new MoneyObject)->fromFloat((float) PHP_INT_MAX + 1, 'USD');
     }
+    
+    public function testCopy()
+    {
+        $money = (new MoneyObject)->setAmount(4321)->setCurrency('GBP');
+        $copy = $money->copy();
+        
+        $this->assertNotSame($money, $copy);
+        $this->assertTrue($money->equalTo($copy));
+    }
 }

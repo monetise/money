@@ -393,4 +393,13 @@ class MoneyCollectionTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    public function testCopy()
+    {
+        $moneyCollection = new MoneyCollection([(new MoneyObject)->setAmount(4321)->setCurrency('GBP')]);
+        $copy = $moneyCollection->copy();
+    
+        $this->assertNotSame($moneyCollection, $copy);
+        $this->assertEquals($moneyCollection->getArrayCopy(), $copy->getArrayCopy());
+    }
+    
 }
