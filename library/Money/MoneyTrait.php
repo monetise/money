@@ -11,6 +11,7 @@ namespace Monetise\Money\Money;
 use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\Exception\OverflowException;
+use Monetise\Money\Exception\CurrencyMismatchException;
 
 /**
  * Trait MoneyTrait
@@ -133,7 +134,7 @@ trait MoneyTrait
     public function compareTo(MoneyInterface $money)
     {
         if ($this->currency !== $money->getCurrency()) {
-            throw new InvalidArgumentException('Operations between different currencies are not supported yet.');
+            throw new CurrencyMismatchException('Operations between different currencies are not supported.');
         }
 
         if ($this->amount == $money->getAmount()) {
@@ -176,7 +177,7 @@ trait MoneyTrait
     public function add(MoneyInterface $money)
     {
         if ($this->currency !== $money->getCurrency()) {
-            throw new InvalidArgumentException('Operations between different currencies are not supported');
+            throw new CurrencyMismatchException('Operations between different currencies are not supported');
         }
 
         $this->amount = $this->toInt($this->amount + $money->getAmount());
@@ -192,7 +193,7 @@ trait MoneyTrait
     public function subtract(MoneyInterface $money)
     {
         if ($this->currency !== $money->getCurrency()) {
-            throw new InvalidArgumentException('Operations between different currencies are not supported');
+            throw new CurrencyMismatchException('Operations between different currencies are not supported');
         }
         
         $this->amount = $this->toInt($this->amount - $money->getAmount());

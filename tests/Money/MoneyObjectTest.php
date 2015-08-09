@@ -17,6 +17,7 @@ use Monetise\Money\Money\Zero;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 use Zend\Stdlib\Hydrator\ObjectProperty;
+use Monetise\Money\Exception\CurrencyMismatchException;
 
 /**
  * Class MoneyObjectTest
@@ -113,7 +114,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($c->equalTo($b));
 
         $d = (new MoneyObject())->setAmount(50)->setCurrency('USD');
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException(CurrencyMismatchException::class);
         $d->equalTo($a);
     }
 
@@ -127,7 +128,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $a->compareTo($a));
 
         $c = (new MoneyObject())->setAmount(50)->setCurrency('USD');
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException(CurrencyMismatchException::class);
         $c->equalTo($a);
     }
 
@@ -184,7 +185,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $a->getAmount());
 
         $c = (new MoneyObject)->setAmount(50)->setCurrency('USD');
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException(CurrencyMismatchException::class);
         $a->add($c);
     }
 
@@ -199,7 +200,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $a->getAmount());
 
         $c = (new MoneyObject)->setAmount(50)->setCurrency('USD');
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException(CurrencyMismatchException::class);
         $a->subtract($c);
     }
 
