@@ -11,6 +11,9 @@ namespace Monetise\MoneyTest\DecimalNumber;
 use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
 use Monetise\Money\Exception\InvalidArgumentException;
+use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\ObjectProperty;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 
 /**
  * Class DecimalNumberObjectTest
@@ -38,6 +41,22 @@ class DecimalNumberObjectTest extends \PHPUnit_Framework_TestCase
     public function testImplementsInterface()
     {
         $this->assertInstanceOf(DecimalNumberInterface::class, new DecimalNumberObject());
+    }
+    
+    public function testGetHydrator()
+    {
+        $decimalNumber = new DecimalNumberObject;
+        $this->assertInstanceOf(HydratorAwareInterface::class, $decimalNumber);
+    
+        // Test default
+        /** @var $defaultHydrator ClassMethods */
+        $defaultHydrator = $decimalNumber->getHydrator();
+        $this->assertInstanceOf(ClassMethods::class, $defaultHydrator);
+        $this->assertTrue($defaultHydrator->getUnderscoreSeparatedKeys(), 'Asserting underscore separated keys');
+    
+        $anotherHydrator = new ObjectProperty();
+        $decimalNumber->setHydrator($anotherHydrator);
+        $this->assertSame($anotherHydrator, $decimalNumber->getHydrator());
     }
 
     public function testSetGetNumeral()
