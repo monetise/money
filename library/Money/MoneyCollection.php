@@ -8,12 +8,12 @@
  */
 namespace Monetise\Money\Money;
 
-use Zend\Stdlib\ArrayObject;
 use Monetise\Money\Exception;
-use Zend\Stdlib\Hydrator\HydratorAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Stdlib\ArrayObject;
 use Zend\Stdlib\Hydrator\ArraySerializable;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Stdlib\Hydrator\HydratorAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Class MoneyCollection
@@ -22,17 +22,17 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
 {
 
     use HydratorAwareTrait;
-    
+
     /**
      * @var MoneyInterface[]
      */
     protected $storage;
-    
+
     /**
      * Constructor
      *
-     * @param array  $input
-     * @param int    $flags
+     * @param array $input
+     * @param int $flags
      * @param string $iteratorClass
      * @throws Exception\InvalidArgumentException
      */
@@ -41,7 +41,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         $this->validateData($input);
         parent::__construct($input, $flags, $iteratorClass);
     }
-    
+
     /**
      * @return HydratorInterface
      */
@@ -52,7 +52,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         return $this->hydrator;
     }
-    
+
     /**
      * Validate the value
      *
@@ -64,15 +64,17 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
     public function validateValue($value)
     {
         if (!$value instanceof MoneyInterface) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Value of type "%s" is invalid for %s; must implement "%s"',
-                is_object($value) ? get_class($value) : gettype($value),
-                get_class($this),
-                MoneyInterface::class
-            ));
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    'Value of type "%s" is invalid for %s; must implement "%s"',
+                    is_object($value) ? get_class($value) : gettype($value),
+                    get_class($this),
+                    MoneyInterface::class
+                )
+            );
         }
     }
-    
+
     /**
      * Validate an array of values
      *
@@ -87,7 +89,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
             $this->validateValue($value);
         }
     }
-    
+
     /**
      * {@inheritdoc}
      * @throws Exception\InvalidArgumentException
@@ -97,7 +99,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         $this->validateValue($value);
         return parent::offsetSet($key, $value);
     }
-    
+
     /**
      * {@inheritdoc}
      * @throws Exception\InvalidArgumentException
@@ -107,7 +109,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         $this->validateValue($value);
         return parent::append($value);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -122,7 +124,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         return $oldData;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -131,9 +133,9 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         foreach ($this->storage as $money) {
             $money->abs();
         }
-        return $this;    
+        return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -144,27 +146,28 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function add(MoneyCollectionInterface $collection)
-    {    
+    {
         return $this->merge($collection)->reduce();
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function subtract(MoneyCollectionInterface $collection)
     {
+        /** @var $money MoneyInterface */
         foreach ($collection as $money) {
             $money = clone $money;
             $this->append($money->negate());
         }
         return $this->reduce();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -175,14 +178,16 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function reduce()
     {
+        /** @var $moneyByCurrency MoneyInterface[] */
         $moneyByCurrency = [];
-        
+
+        /** @var $money MoneyInterface */
         foreach ($this->storage as $money) {
             $currency = $money->getCurrency();
             if (!isset($moneyByCurrency[$currency])) {
@@ -190,11 +195,11 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
             }
             $moneyByCurrency[$currency]->add($money);
         }
-        
+
         $this->storage = $moneyByCurrency;
         return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -205,7 +210,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         return $this;
     }
-    
+
     /**
      * @return MoneyCollectionInterface
      */
@@ -213,7 +218,7 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
     {
         return clone $this;
     }
-    
+
     /**
      * Clone recursively all objects within the collection
      */
@@ -225,5 +230,4 @@ class MoneyCollection extends ArrayObject implements MoneyCollectionInterface, H
         }
         $this->storage = $cloned;
     }
-   
 }

@@ -9,9 +9,9 @@
 namespace Monetise\Money\Money;
 
 use Monetise\Money\DecimalNumber\DecimalNumberInterface;
+use Monetise\Money\Exception\CurrencyMismatchException;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\Exception\OverflowException;
-use Monetise\Money\Exception\CurrencyMismatchException;
 
 /**
  * Trait MoneyTrait
@@ -49,7 +49,7 @@ trait MoneyTrait
         if ($amount === null) {
             $this->amount = 0;
             return $this;
-        } 
+        }
         
         if (!is_int($amount)) {
             throw new InvalidArgumentException(sprintf(

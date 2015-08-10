@@ -9,6 +9,7 @@
 namespace Monetise\MoneyTest\Money;
 
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
+use Monetise\Money\Exception\CurrencyMismatchException;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Monetise\Money\Exception\OverflowException;
 use Monetise\Money\Money\MoneyInterface;
@@ -17,7 +18,6 @@ use Monetise\Money\Money\Zero;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
 use Zend\Stdlib\Hydrator\ObjectProperty;
-use Monetise\Money\Exception\CurrencyMismatchException;
 
 /**
  * Class MoneyObjectTest
@@ -246,7 +246,7 @@ class MoneyObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(OverflowException::class);
         $a = (new MoneyObject)->fromFloat((float) PHP_INT_MAX + 1, 'USD');
-    }   
+    }
     
     public function testCopy()
     {

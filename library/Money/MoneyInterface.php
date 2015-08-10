@@ -8,6 +8,7 @@
  */
 namespace Monetise\Money\Money;
 
+use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\Exception\InvalidArgumentException;
 
 /**
@@ -143,7 +144,7 @@ interface MoneyInterface
     
     /**
      * Get a copy of this money object
-     * 
+     *
      * @return MoneyInterface
      */
     public function copy();

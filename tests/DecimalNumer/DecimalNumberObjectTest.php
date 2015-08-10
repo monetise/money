@@ -12,8 +12,8 @@ use Monetise\Money\DecimalNumber\DecimalNumberInterface;
 use Monetise\Money\DecimalNumber\DecimalNumberObject;
 use Monetise\Money\Exception\InvalidArgumentException;
 use Zend\Stdlib\Hydrator\ClassMethods;
-use Zend\Stdlib\Hydrator\ObjectProperty;
 use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Stdlib\Hydrator\ObjectProperty;
 
 /**
  * Class DecimalNumberObjectTest
