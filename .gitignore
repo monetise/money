@@ -1,0 +1,33 @@
+### IDEs
+
+.DS_Store
+.~lock.*
+*.ipr
+*.iws
+.idea
+.buildpath
+.project
+.settings
+
+### Zend Framework 2
+
+# Composer files
+composer.phar
+composer.lock
+vendor/
+
+# Local configs
+config/autoload/*local.php
+
+# Data
+log/
+logs/
+cache/
+temp/
+tmp/
+
+### PHP
+
+build/
+phpunit.xml
+phpmd.xml
